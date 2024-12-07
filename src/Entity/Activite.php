@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ActiviteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ActiviteRepository::class)]
 class Activite
@@ -13,25 +15,41 @@ class Activite
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de l'activité est obligatoire.")]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le nom de l'activité doit comporter au moins {{ limit }} caractères.", maxMessage: "Le nom de l'activité ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $nomAC = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\GreaterThanOrEqual(
+        value: "today",
+        message: "La date de l'activité ne peut pas être dans le passé."
+    )]
+    #[Assert\NotNull(message: "La date de l'activité est obligatoire.")]
+
     private ?\DateTimeInterface $dateAC = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $HeureAC = null;
 
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotNull(message: "L'heure de l'activité est obligatoire.")]
+    private \DateTimeInterface $HeureAC;
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le type d'activité est obligatoire.")]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le nom de l'activité doit comporter au moins {{ limit }} caractères.",
+        maxMessage: "Le nom de l'activité ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $typeAC = null;
 
     #[ORM\Column(type: Types::ARRAY)]
+    #[Assert\All([
+        new Assert\Type("string"),  // Ensure each item in the array is a string
+    ])]
     private array $RappelAC = [];
 
     #[ORM\ManyToOne(inversedBy: 'activites')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: "L'utilisateur est obligatoire.")]
     private ?User $user = null;
+
 
     public function getId(): ?int
     {
@@ -109,4 +127,5 @@ class Activite
 
         return $this;
     }
+
 }

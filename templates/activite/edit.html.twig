@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Modifier l'Activité</h1>
+
+        <!-- Affichage des messages flash -->
+        {% for label, messages in app.flashes %}
+            <div class="alert alert-{{ label }} mt-3">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="card shadow-sm p-4">
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <!-- Vérifier si le formulaire a des erreurs globales -->
+            {% if form.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    <p>Le formulaire contient des erreurs. Veuillez vérifier les champs suivants :</p>
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                {{ form_label(form.nomAC, 'Nom de l\'activité') }}
+                {{ form_widget(form.nomAC, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.nomAC) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.dateAC, 'Date') }}
+                {{ form_widget(form.dateAC, {'attr': {'class': 'form-control', 'value': form.dateAC.vars.value ? form.dateAC.vars.value|date('Y-m-d') : ''}}) }}
+                {{ form_errors(form.dateAC) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.HeureAC, 'Heure') }}
+                {{ form_widget(form.HeureAC, {'attr': {'class': 'form-control', 'value': form.HeureAC.vars.value ? form.HeureAC.vars.value|date('H:i:s') : ''}}) }}
+                {{ form_errors(form.HeureAC) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.typeAC, 'Type d\'activité') }}
+                {{ form_widget(form.typeAC, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.typeAC) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.RappelAC, 'Rappels') }}
+                <div>
+                    {% for widget in form.RappelAC %}
+                        <div class="input-group mb-2">
+                            {{ widget }}
+                            {{ form_errors(widget) }}
+                        </div>
+                    {% endfor %}
+                    {{ form_widget(form.RappelAC) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.user, 'Utilisateur') }}
+                {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.user) }}
+            </div>
+
+            <!-- Bouton de mise à jour de l'activité -->
+            <button type="submit" class="btn btn-success">Mettre à jour</button>
+
+            {{ form_end(form) }}
+        </div>
+
+        <!-- Bouton pour retourner à la liste -->
+        <a href="{{ path('app_activite_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+    </div>
+{% endblock %}
+</html>
