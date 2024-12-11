@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[UniqueEntity(
+    fields: ['email'],
+    message: "Cet email est déjà utilisé. Veuillez en choisir un autre."
+)]
+
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,21 +25,44 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire.")]
     private ?string $nom = null;
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private $resetToken;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire.")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'email est obligatoire.")]
+    #[Assert\Email(message: "L'email '{{ value }}' n'est pas valide.")]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    #[ORM\Column(type: 'json')]
+    private ?array $roles = [];
 
     #[ORM\Column(length: 255)]
-    private ?string $mdp = null;
+    #[Assert\NotBlank(message: "Le mot de passe est obligatoire.")]
+    #[Assert\Length(
+        min: 6,
+        minMessage: "Le mot de passe doit contenir au moins {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/(?=.*[!@#$%^&*(),.?\":{}|<>])/",
+        message: "Le mot de passe doit contenir au moins un caractère spécial."
+    )]
+    #[Assert\Regex(
+        pattern: "/(?=.*[A-Za-z])(?=.*[0-9])/",
+        message: "Le mot de passe doit contenir à la fois des lettres et des chiffres."
+    )]
+    private ?string $Password = null;
 
     #[ORM\Column]
+    #[Assert\GreaterThan(
+        value: 700,
+        message: "Le solde doit être supérieur à {{ compared_value }}."
+    )]
     private ?float $soldeM = null;
 
     /**
@@ -58,6 +90,10 @@ class User
     private Collection $preferences;
 
     #[ORM\Column]
+    #[Assert\GreaterThanOrEqual(
+        value: 18,
+        message: "L'âge doit être supérieur ou égal à {{ compared_value }} ans."
+    )]
     private ?int $age = null;
 
     public function __construct()
@@ -109,26 +145,36 @@ class User
         return $this;
     }
 
-    public function getRole(): ?string
+    public function getRoles(): array
     {
-        return $this->role;
+        $roles = $this->roles;
+    if (isset($roles[0]) && is_array($roles[0])) {
+        return $roles[0];
     }
-
-    public function setRole(string $role): static
+    $roles[] = 'ROLE_USER'; // Ajoute ROLE_USER par défaut
+    return array_unique($roles);
+    }
+    
+    public function setRoles(array $roles): self
     {
-        $this->role = $role;
-
+        $this->roles = $roles;
         return $this;
     }
 
-    public function getMdp(): ?string
-    {
-        return $this->mdp;
-    }
 
-    public function setMdp(string $mdp): static
+
+
+    public function getPassword(): ?string
     {
-        $this->mdp = $mdp;
+        return $this->Password;
+        
+    }
+       
+    
+
+    public function setPassword(string $Password): static
+    {
+        $this->Password = $Password;
 
         return $this;
     }
@@ -143,6 +189,25 @@ class User
         $this->soldeM = $soldeM;
 
         return $this;
+    }
+    public function getResetToken(): ?string
+    { 
+    return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+    $this->resetToken = $resetToken;
+
+    return $this;
+    }
+    public function eraseCredentials(): void
+    {
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
     }
 
     /**
@@ -276,4 +341,6 @@ class User
 
         return $this;
     }
+    
+
 }

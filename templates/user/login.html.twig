@@ -1,0 +1,108 @@
+
+
+{% block title %}{% endblock %}
+{% block stylesheets %}
+<style>
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #8a6fe8, #ffb87a);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+.login-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #6a41cc;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="email"], input[type="password"] {
+    width: 90%;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #8a6fe8;
+    box-shadow: 0 0 5px rgba(138, 111, 232, 0.5);
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #ffb87a, #8a6fe8);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #8a6fe8, #ffb87a);
+    box-shadow: 0 4px 10px rgba(138, 111, 232, 0.3);
+}
+
+.alert-danger {
+    color: #fff;
+    background-color: #ff4e4e;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+</style>
+{% endblock %}
+{% block body %}
+<div class="login-container">
+    <h1>Se connecter</h1>
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+    <form method="POST" action="{{ path('app_join') }}" >
+
+        <div class="form-group">
+            <input type="email" name="email" value="{{ last_username }}"  placeholder="Votre email" required>
+        </div>
+        <div class="form-group">
+            <input type="Password" name="Password" placeholder="Votre mot de passe" required>
+        </div>
+           <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+        <p>
+
+        
+    <a href="{{ path('app_forgot_password') }}">Mot de passe oublié ?</a>
+    </p>
+
+
+        <button type="submit" class="btn-submit">Se connecter</button>
+        
+    </form>
+</div>
+{% endblock %}

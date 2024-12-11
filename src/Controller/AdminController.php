@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractController
 {
-    #[Route('/admin')]
+    #[Route('/admin', name:'app_admin')]
     function showAdmin(){
         return $this->render('baseAdmin.html.twig');
 

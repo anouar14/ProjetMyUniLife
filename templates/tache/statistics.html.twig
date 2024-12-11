@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+.form-container a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #F7A7B8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+</style>
+
+    <h1>Statistiques des Tâches</h1>
+
+    <!-- Ajuster la taille du canvas ici -->
+    <canvas id="taskChart" width="200" height="200"></canvas> <!-- Taille réduite du graphique -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('taskChart').getContext('2d');
+        const taskChart = new Chart(ctx, {
+            type: 'pie', // Choisir le type de graphique
+            data: {
+                labels: ['Terminées', 'Non terminées'],
+                datasets: [{
+                    label: 'Statut des Tâches',
+                    data: [
+                        {{ statistics['1'] ?? 0 }},
+                        {{ statistics['0'] ?? 0 }}
+                    ], // Données: 1 pour terminé, 0 pour non terminé
+                    backgroundColor: ['#F7A7B8', '#D4A5F7'], // Rose clair et violet clair
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + ' tâches'; // Afficher le nombre de tâches
+                            }
+                        }
+                    }
+                },
+                aspectRatio: 1, // Garder la forme circulaire
+                maintainAspectRatio: true, // Maintenir l'aspect du graphique
+            }
+        });
+    </script>
+    <div class="form-container">
+     <a href="{{ path('app_tache_index') }}">Back to list</a>
+     </div>
+{% endblock %}

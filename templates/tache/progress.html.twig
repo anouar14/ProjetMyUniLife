@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Taux de progression{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Taux de progression des tâches</h1>
+        <p>Le taux de progression de vos tâches est de : {{ progress }}%</p>
+        <p>Status : {{ progressStatus }}</p>
+        <a href="{{ path('app_tache_index') }}" class="btn btn3">Retour à la liste des tâches</a>
+    </div>
+{% endblock %}

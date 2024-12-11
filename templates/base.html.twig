@@ -24,9 +24,14 @@
     <link rel="stylesheet" href="{{asset('css/slick.css')}}">
     <link rel="stylesheet" href="{{asset('css/nice-select.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+<<<<<<< HEAD
 
         {% block stylesheets %}
         {% endblock %}
+=======
+    
+       
+>>>>>>> d8ae123 (first commit)
 
 
     </head>
@@ -41,7 +46,7 @@
                             <!-- Logo -->
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="index.html"><img src="img/logo/LogoMyUniLife.png" width="150" height="150" alt=""></a>
+                                    <a href="index.html"><img src="{{asset('img/LogoMyUniLife.png')}}" width="150" height="150" alt=""></a>
                                 </div>
                             </div>
                             <div class="col-xl-10 col-lg-10">
@@ -49,9 +54,15 @@
                                     <!-- Main-menu -->
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
+<<<<<<< HEAD
                                             <ul id="navigation">
                                                 <li class="active" ><a href="index.html">Home</a></li>
                                                 <li><a href="courses.html">Services</a></li>
+=======
+                                            <ul id="navigation">                                                                                          
+                                                <li class="active" ><a href="{{path('app_home')}}">Home</a></li>
+                                                <li><a href="{{path('app_service')}}">Services</a></li>
+>>>>>>> d8ae123 (first commit)
                                                 <li><a href="about.html">About</a></li>
                                                 <li><a href="#">Blog</a>
                                                     <ul class="submenu">
@@ -62,8 +73,13 @@
                                                 </li>
                                                 <li><a href="contact.html">Contact</a></li>
                                                 <!-- Button -->
-                                                <li class="button-header margin-left "><a href="#" class="btn">Join</a></li>
-                                                <li class="button-header"><a href="login.html" class="btn btn3">Log in</a></li>
+                                                {% if app.user %}
+                                                <!-- Si l'utilisateur est connecté -->
+                                                <li class="button-header"><a href="{{ path('app_logout') }}" class="btn btn3">Log out</a></li>
+                                                {% else %}
+                                                <li class="button-header margin-left "><a href="{{ path('app_log') }}" class="btn">Join</a></li>
+                                                <li class="button-header"><a href="{{ path('app_join') }}" class="btn btn3">Log in</a></li>
+                                                {% endif %}
                                             </ul>
                                         </nav>
                                     </div>
@@ -79,7 +95,7 @@
             </div>
         </div>
         <!-- Header End -->
-        {% block body %}{% endblock %}
+       
         <!-- ? Preloader Start -->
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
@@ -92,6 +108,7 @@
         </div>
     </div>
     <!-- Preloader Start -->
+     
     <main>
         <!--? slider Area Start-->
         <section class="slider-area ">
@@ -101,10 +118,12 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-xl-6 col-lg-7 col-md-12">
+                            
                                 <div class="hero__caption">
                                     <h1 data-animation="fadeInLeft" data-delay="0.2s">MyUniLife<br> platform</h1>
+                                    
                                     <p data-animation="fadeInLeft" data-delay="0.4s">Votre allié pour une vie étudiante organisée et épanouie</p>
-                                    <a href="#" class="btn hero-btn" data-animation="fadeInLeft" data-delay="0.7s">Join for Free</a>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -112,6 +131,7 @@
                 </div>
             </div>
         </section>
+        {% block body %}
         <!-- ? services-area -->
 
         <!-- Courses area start -->
@@ -136,14 +156,20 @@
                                 <h3>TimeMaster</h3>
                                 <p>TimeMaster aide les étudiants à organiser leur emploi du temps en ajoutant et priorisant leurs tâches. Ce module inclut des rappels, un suivi de progression, et des alertes pour les échéances, garantissant une gestion du temps simple et efficace.
                                 </p>
+<<<<<<< HEAD
 
                                 <a href="#" class="border-btn border-btn2">Commencer</a>
+=======
+                                
+                                <a href="{{path('app_tache_new')}}" class="border-btn border-btn2">Commencer</a>
+>>>>>>> d8ae123 (first commit)
                             </div>
 
                         </div>
                     </div>
                     <!-- Single -->
                     <!-- Single -->
+                    
                     <div class="properties pb-20">
                         <div class="properties__card">
                             <div class="properties__img overlay1">
@@ -365,7 +391,7 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-12">
                         <div class="section-tittle text-center mt-20">
-                            <a href="courses.html" class="border-btn">View More Subjects</a>
+                            <a href={{path('app_service')}}" class="border-btn">View More Subjects</a>
                         </div>
                     </div>
                 </div>
@@ -504,6 +530,7 @@
         </section>
         <!-- About Area End -->
     </main>
+    {% endblock %}
           <footer>
      <div class="footer-wrappper footer-bg">
         <!-- Footer Start-->
@@ -515,7 +542,7 @@
                             <div class="single-footer-caption mb-30">
                                 <!-- logo -->
                                 <div class="footer-logo mb-25">
-                                    <a href="index.html"><src="img/logo/LogoMyUniLife.png" alt=""></a>
+                                    <a href="index.html"><src="img/LogoMyUniLife.png" alt=""></a>
                                 </div>
                                 <div class="footer-tittle">
                                     <div class="footer-pera">
@@ -637,7 +664,12 @@
 <script src="{{asset('js/plugins.js')}}"></script>
 <script src="{{asset('js/main.js')}}"></script>
  {% block javascripts %}
+<<<<<<< HEAD
 
+=======
+            {{ encore_entry_script_tags('app') }}
+            
+>>>>>>> d8ae123 (first commit)
         {% endblock %}
 
     </body>
