@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+<style>
+    /* Style général du tableau */
+   
+.form-container a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #F7A7B8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-family: 'Arial', sans-serif;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style des en-têtes de colonnes avec dégradé violet-bleu */
+    th {
+        padding: 12px 15px;
+        background: linear-gradient(to right, #9c27b0, #3f51b5); /* Dégradé violet-bleu */
+        color: white;
+        font-size: 16px;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    /* Style des cellules du tableau */
+    td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        background-color: #f9f9f9;
+        font-size: 14px;
+    }
+
+    /* Effet de survol sur les lignes */
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Style du message "Aucune tâche trouvée" */
+    .no-data {
+        text-align: center;
+        color: #999;
+        font-style: italic;
+    }
+
+    /* Style du tableau pour les appareils mobiles */
+    @media (max-width: 768px) {
+        table {
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 8px 10px;
+        }
+    }
+    
+       
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom de la tâche</th>
+            <th>Durée (jours)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in durations %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.nomT }}</td>
+                <td>{{ task.duration }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="no-data">Aucune tâche trouvée.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+ <div class="form-container">
+     <a href="{{ path('app_tache_index') }}">Back to list</a>
+     </div>
+{% endblock %}

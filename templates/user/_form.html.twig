@@ -1,0 +1,53 @@
+{{ form_start(form) }}
+    <div>
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, {'attr': {'type': 'text'}}) }}
+        {% if form.email.vars.errors is not empty %}
+            <ul class="text-danger">
+                {% for error in form.email.vars.errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.Password) }}
+        {{ form_widget(form.Password) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.roles) }}
+        <div class="radio-buttons">
+            {{ form_widget(form.roles) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.soldeM) }}
+        {{ form_widget(form.soldeM) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.age) }}
+        {{ form_widget(form.age) }}
+    </div>
+
+    
+
+
+    <div>
+        {{ form_rest(form) }}
+    </div>
+    
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

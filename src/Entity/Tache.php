@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\TacheRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TacheRepository::class)]
 class Tache
 {
@@ -15,25 +15,40 @@ class Tache
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de la tâche est obligatoire.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "Le nom de la tâche ne doit pas dépasser {{ limit }} caractères."
+    )]
     private ?string $nomT = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La description de la tâche est obligatoire.")]
     private ?string $desT = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "La date de début est obligatoire.")]
+    #[Assert\LessThanOrEqual(
+    propertyPath: "dateFin",
+    message: "La date de début doit être inférieure ou égale à la date de fin."
+    )]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: "La date de fin est obligatoire.")]
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotBlank(message: "L'heure de début est obligatoire.")]
+    
     private ?\DateTimeInterface $timeOn = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotBlank(message: "L'heure de fin est obligatoire.")]
     private ?\DateTimeInterface $timeOut = null;
 
     #[ORM\Column]
-    private ?bool $statutT = null;
+    private ?bool $statutT = false;
 
     #[ORM\ManyToOne(inversedBy: 'taches')]
     #[ORM\JoinColumn(nullable: false)]

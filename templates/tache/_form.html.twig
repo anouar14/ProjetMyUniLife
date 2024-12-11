@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    {{ form_row(form.nomT) }}
+    {{ form_row(form.desT) }}
+    {{ form_row(form.dateDebut) }}
+    {{ form_row(form.dateFin) }}
+    {{ form_row(form.timeOn) }}
+    {{ form_row(form.timeOut) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
