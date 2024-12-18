@@ -79,7 +79,6 @@
             </div>
         </div>
         <!-- Header End -->
-        {% block body %}{% endblock %}
         <!-- ? Preloader Start -->
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
@@ -113,7 +112,7 @@
             </div>
         </section>
         <!-- ? services-area -->
-
+        {% block body %}
         <!-- Courses area start -->
         <div class="courses-area section-padding40 fix">
             <div class="container">
@@ -504,7 +503,9 @@
         </section>
         <!-- About Area End -->
     </main>
-          <footer>
+        {% endblock %}
+
+        <footer>
      <div class="footer-wrappper footer-bg">
         <!-- Footer Start-->
         <div class="footer-area footer-padding">

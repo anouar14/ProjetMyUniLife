@@ -10,10 +10,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 #[Route('/activite')]
 final class ActiviteController extends AbstractController
 {
+    private ActiviteRepository $activiteRepository;
+    private MailerInterface $mailer;
+
+// Déclaration du constructeur au début de la classe
+    public function __construct(ActiviteRepository $activiteRepository, MailerInterface $mailer)
+    {
+        $this->activiteRepository = $activiteRepository;
+        $this->mailer = $mailer;
+    }
+
     #[Route(name: 'app_activite_index', methods: ['GET'])]
     public function index(ActiviteRepository $activiteRepository): Response
     {
@@ -86,10 +97,16 @@ final class ActiviteController extends AbstractController
     #[Route('/{id}', name: 'app_activite_show', methods: ['GET'])]
     public function show(Activite $activite): Response
     {
+        // Assurez-vous que $activite est une instance valide
+        if (!$activite) {
+            throw $this->createNotFoundException('Activité non trouvée');
+        }
+
         return $this->render('activite/show.html.twig', [
             'activite' => $activite,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_activite_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Activite $activite, EntityManagerInterface $entityManager): Response
@@ -112,7 +129,7 @@ final class ActiviteController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_activite_delete', methods: ['POST'])]
+    #[Route('/activite/{id}/delete', name: 'app_activite_delete', methods: ['POST'])]
     public function delete(Request $request, Activite $activite, EntityManagerInterface $entityManager): Response
     {
         // Vérification du token CSRF
@@ -120,10 +137,70 @@ final class ActiviteController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $activite->getId(), $csrfToken)) {
             $entityManager->remove($activite);
             $entityManager->flush();
-
             $this->addFlash('success', 'Activité supprimée avec succès');
+
         }
 
         return $this->redirectToRoute('app_activite_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/send-activity-reminder', name: 'send_activity_reminder', methods: ['POST'])]
+    public function sendActivityReminder(): Response
+    {
+        // Récupérer les activités pour demai
+        //n
+        $activities = $this->activiteRepository->findActivitiesForTomorrow();
+        dump($activities);  // Log pour vérifier les données récupérées
+
+        foreach ($activities as $activity) {
+            if ($activity->getUser()) {
+                $user = $activity->getUser();
+
+                // Créer l'email de notification
+                $email = (new Email())
+                    ->from('Rappel@myUniLife.com')
+                    ->to($user->getEmail())
+                    ->subject('Rappel : Activité demain')
+                    ->html('<p>Cher(e) ' . $user->getPrenom() . ',<br>Nous vous rappelons que vous avez une activité prévue demain : <strong>' . $activity->getNomAC() . '</strong> à ' . $activity->getHeureAC()->format('H:i') . '.</p>');
+            }
+        }
+        try {
+            $this->mailer->send($email);
+        } catch (\Exception $e) {
+            return new Response('Erreur lors de l\'envoi des emails: ' . $e->getMessage());
+        }
+        return new Response('Rappels envoyés avec succès!');
+    }
+    #[Route(name: 'app_activite_index', methods: ['GET', 'POST'])]
+    public function triEtRecherche(ActiviteRepository $activiteRepository, Request $request): Response
+    {
+        // Récupération des paramètres de requête
+        $searchTerm = $request->query->get('search', ''); // Terme de recherche (par défaut vide)
+        $sortOption = $request->query->get('sort', 'date');
+
+        // Récupération des activités
+        if (!empty($searchTerm)) {
+            // Si un terme de recherche est fourni, effectuer une recherche par nom
+            $activites = $activiteRepository->findByName($searchTerm);
+        } else {
+            // Si aucun terme de recherche, trier les activités
+            if ($sortOption === 'date') {
+                $activites = $activiteRepository->findAllOrderedByDate();
+            } elseif ($sortOption === 'id') {
+                $activites = $activiteRepository->findAllOrderedById();
+            } else {
+                $activites = $activiteRepository->findAll(); // Par défaut, retourner toutes les activités
+            }
+        }
+
+        // Retourne la vue avec les données
+        return $this->render('activite/index.html.twig', [
+            'activites' => $activites,
+            'searchTerm' => $searchTerm,
+            'sortOption' => $sortOption,
+        ]);
+    }
+
+
+
 }

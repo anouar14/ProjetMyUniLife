@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Preference;
 use App\Form\PreferenceType;
+use App\Repository\ActiviteRepository;
 use App\Repository\PreferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -85,5 +86,21 @@ final class PreferenceController extends AbstractController
         }
 
         return $this->redirectToRoute('app_preference_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route( name: 'app_preference_index', methods: ['GET'])]
+    public function triTacheId(PreferenceRepository $preferenceRepository, Request $request): Response
+    {
+        $searchTerm = $request->query->get('search', '');
+
+        if ($searchTerm) {
+            $preferences = $preferenceRepository->findByNomT($searchTerm); // Assume a method exists for searching by name
+        } else {
+            $preferences = $preferenceRepository->findAllOrderedById();
+        }
+
+        return $this->render('preference/index.html.twig', [
+            'preferences' => $preferences,
+            'searchTerm' => $searchTerm,
+        ]);
     }
 }

@@ -1,85 +1,176 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Modifier l'Activité</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            font-size: 15px;
+        }
+
+        .form-container {
+            width: 50%;
+            margin: 50px auto;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 15px;
+            padding: 20px 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 15px;
+        }
+
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+
+        }
+
+        .form-container .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #ffffff;
+            color: #6a11cb;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .form-container .btn:hover {
+            background: #f0f8ff;
+            color: #2575fc;
+            transform: scale(1.05);
+        }
+
+        .form-container a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-{% block body %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Modifier l'Activité</h1>
+<body>
+<div class="form-container">
+    <h1>Modifier l'Activité</h1>
 
-        <!-- Affichage des messages flash -->
-        {% for label, messages in app.flashes %}
-            <div class="alert alert-{{ label }} mt-3">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+    <!-- Affichage des messages flash -->
+    {% for label, messages in app.flashes %}
+        <div class="alert alert-{{ label }} mt-3">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <!-- Formulaire de modification -->
+    <div>
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+        {% if form.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                <p>Le formulaire contient des erreurs. Veuillez vérifier les champs suivants :</p>
             </div>
-        {% endfor %}
+        {% endif %}
 
-        <div class="card shadow-sm p-4">
-
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-
-            <!-- Vérifier si le formulaire a des erreurs globales -->
-            {% if form.vars.errors|length > 0 %}
-                <div class="alert alert-danger">
-                    <p>Le formulaire contient des erreurs. Veuillez vérifier les champs suivants :</p>
-                </div>
-            {% endif %}
-
-            <div class="mb-3">
-                {{ form_label(form.nomAC, 'Nom de l\'activité') }}
-                {{ form_widget(form.nomAC, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nomAC) }}
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.dateAC, 'Date') }}
-                {{ form_widget(form.dateAC, {'attr': {'class': 'form-control', 'value': form.dateAC.vars.value ? form.dateAC.vars.value|date('Y-m-d') : ''}}) }}
-                {{ form_errors(form.dateAC) }}
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.HeureAC, 'Heure') }}
-                {{ form_widget(form.HeureAC, {'attr': {'class': 'form-control', 'value': form.HeureAC.vars.value ? form.HeureAC.vars.value|date('H:i:s') : ''}}) }}
-                {{ form_errors(form.HeureAC) }}
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.typeAC, 'Type d\'activité') }}
-                {{ form_widget(form.typeAC, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.typeAC) }}
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.RappelAC, 'Rappels') }}
-                <div>
-                    {% for widget in form.RappelAC %}
-                        <div class="input-group mb-2">
-                            {{ widget }}
-                            {{ form_errors(widget) }}
-                        </div>
-                    {% endfor %}
-                    {{ form_widget(form.RappelAC) }}
-                </div>
-            </div>
-
-            <div class="mb-3">
-                {{ form_label(form.user, 'Utilisateur') }}
-                {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.user) }}
-            </div>
-
-            <!-- Bouton de mise à jour de l'activité -->
-            <button type="submit" class="btn btn-success">Mettre à jour</button>
-
-            {{ form_end(form) }}
+        <div>
+            {{ form_label(form.nomAC, 'Nom de l\'activité') }}
+            {{ form_widget(form.nomAC) }}
+            {{ form_errors(form.nomAC) }}
         </div>
 
-        <!-- Bouton pour retourner à la liste -->
-        <a href="{{ path('app_activite_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+        <div>
+            {{ form_label(form.dateAC, 'Date') }}
+            {{ form_widget(form.dateAC, {'attr': {'value': form.dateAC.vars.value ? form.dateAC.vars.value|date('Y-m-d') : ''}}) }}
+            {{ form_errors(form.dateAC) }}
+        </div>
+
+        <div>
+            {{ form_label(form.HeureAC, 'Heure') }}
+            {{ form_widget(form.HeureAC, {'attr': {'value': form.HeureAC.vars.value ? form.HeureAC.vars.value|date('H:i:s') : ''}}) }}
+            {{ form_errors(form.HeureAC) }}
+        </div>
+
+        <div>
+            {{ form_label(form.typeAC, 'Type d\'activité') }}
+            {{ form_widget(form.typeAC) }}
+            {{ form_errors(form.typeAC) }}
+        </div>
+        <div class="mb-3">
+            {#   {{ form_label(form.RappelAC, 'Rappels') }}  #}
+            <div>
+                {% for widget in form.RappelAC %}
+                    <div class="input-group mb-2">
+                        {{ widget }}
+                        {{ form_errors(widget) }}
+                    </div>
+                {% endfor %}
+                {{ form_widget(form.RappelAC) }}
+            </div>
+        </div>
+        <div>
+            {{ form_label(form.user, 'Utilisateur') }}
+            {{ form_widget(form.user) }}
+            {{ form_errors(form.user) }}
+        </div>
+
+        <button type="submit" class="btn mt-3">Mettre à jour</button>
+
+        {{ form_end(form) }}
     </div>
-{% endblock %}
+
+    <!-- Bouton pour retourner à la liste -->
+    <a href="{{ path('app_activite_index') }}" class="btn btn-primary">Retour à la liste</a>
+</div>
+</body>
 </html>
+
+{% endblock %}
