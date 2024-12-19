@@ -3,7 +3,10 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
+<<<<<<< HEAD
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+=======
+>>>>>>> f03725adc05f292e431f40a97e04d94cea6a5765
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -84,7 +87,10 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/flex" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/form" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/framework-bundle" />
+<<<<<<< HEAD
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/google-mailer" />
+=======
+>>>>>>> f03725adc05f292e431f40a97e04d94cea6a5765
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-foundation" />
@@ -130,12 +136,20 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/var-exporter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/web-link" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/web-profiler-bundle" />
+<<<<<<< HEAD
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-bundle" />
+=======
+>>>>>>> f03725adc05f292e431f40a97e04d94cea6a5765
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+<<<<<<< HEAD
+=======
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/scheduler" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dragonmantank/cron-expression" />
+>>>>>>> f03725adc05f292e431f40a97e04d94cea6a5765
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
