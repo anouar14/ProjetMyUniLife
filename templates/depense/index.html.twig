@@ -1,0 +1,105 @@
+{% extends 'depense.html.twig' %}
+
+{% block title %}Dépense Index{% endblock %}
+
+{% block body %}
+    <h1>Liste des Dépenses</h1>
+    
+    <a href="{{ path('report_monthly') }}" 
+       class="orange-button">
+        Voir le rapport mensuel
+    </a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a href="{{ path('app_depense_index', {'sort': 'id', 'direction': app.request.get('direction') == 'asc' ? 'desc' : 'asc'}) }}">
+                        ID {{ app.request.get('sort') == 'id' ? (app.request.get('direction') == 'asc' ? '▲' : '▼') : '' }}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_depense_index', {'sort': 'categorie', 'direction': app.request.get('direction') == 'asc' ? 'desc' : 'asc'}) }}">
+                        Catégorie ID {{ app.request.get('sort') == 'categorie' ? (app.request.get('direction') == 'asc' ? '▲' : '▼') : '' }}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_depense_index', {'sort': 'typeDep', 'direction': app.request.get('direction') == 'asc' ? 'desc' : 'asc'}) }}">
+                        Type de Dépense {{ app.request.get('sort') == 'typeDep' ? (app.request.get('direction') == 'asc' ? '▲' : '▼') : '' }}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_depense_index', {'sort': 'montant', 'direction': app.request.get('direction') == 'asc' ? 'desc' : 'asc'}) }}">
+                        Montant {{ app.request.get('sort') == 'montant' ? (app.request.get('direction') == 'asc' ? '▲' : '▼') : '' }}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('app_depense_index', {'sort': 'dateDep', 'direction': app.request.get('direction') == 'asc' ? 'desc' : 'asc'}) }}">
+                        Date de Dépense {{ app.request.get('sort') == 'dateDep' ? (app.request.get('direction') == 'asc' ? '▲' : '▼') : '' }}
+                    </a>
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for depense in depenses %}
+            <tr>
+                <td>{{ depense.id }}</td>
+                <td>{{ depense.categorie ? depense.categorie.id : 'N/A' }}</td>
+                <td>{{ depense.typeDep }}</td>
+                <td>{{ depense.montant }}</td>
+                <td>{{ depense.dateDep ? depense.dateDep|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_depense_show', {'id': depense.id}) }}">Afficher</a>
+                    <a href="{{ path('app_depense_edit', {'id': depense.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_depense_new') }}" class="orange-button">Créer une nouvelle dépense</a>
+    <a href="{{ path('app_categorie_index') }}" class="orange-button">Gérer les Catégories</a>
+
+    <div style="margin-top: 20px;">
+        <div style="
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: white;
+            background-color: {{ difference >= 0 ? 'green' : 'red' }};
+        ">
+            Différence : {{ difference }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .orange-button {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .orange-button:hover {
+        background-color: darkorange;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        color: black;
+    }
+</style>
+{% endblock %}

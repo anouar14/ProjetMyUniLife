@@ -58,6 +58,9 @@ class UserRepository extends ServiceEntityRepository
      * @param string $email Email de l'utilisateur à rechercher.
      * @return User|null Retourne l'utilisateur correspondant ou null s'il n'est pas trouvé.
      */
+    
+    //SELECT u FROM User u WHERE u.email = :email
+
     public function findOneByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('u') // Initialise le query builder avec un alias 'u' pour l'entité User.

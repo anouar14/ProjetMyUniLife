@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}Créer une nouvelle Préférence{% endblock %}</title>
+    <style>
+        /* Styles généraux */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            width: 50%;
+            margin: 50px auto;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 15px;
+            padding: 20px 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .form-container .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #ffffff;
+            color: #6a11cb;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .form-container .btn:hover {
+            background: #f0f8ff;
+            color: #2575fc;
+            transform: scale(1.05);
+        }
+
+        .form-container a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        /* Ajouter de l'espace autour du formulaire */
+        .container {
+            margin-top: 30px;
+        }
+
+        .alert {
+            margin-bottom: 15px;
+        }
+
+        /* Rendre le bouton "Retour à la liste" plus harmonieux */
+        .btn-secondary {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #ffffff;
+            color: #2575fc;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f8ff;
+            color: #6a11cb;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+{% block body %}
+    <div class="form-container">
+        <h1>Créer une nouvelle Préférence</h1>
+
+        <!-- Affichage des messages flash -->
+        {% for label, messages in app.flashes %}
+            <div class="alert alert-{{ label }} mt-3">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <!-- Vérifier si le formulaire a des erreurs globales -->
+            {% if form.vars.errors|length > 0 %}
+                <div class="alert alert-danger">
+                    <p>Le formulaire contient des erreurs. Veuillez vérifier les champs suivants :</p>
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                {{ form_label(form.typePr, 'Type d\'activité') }}
+                {{ form_widget(form.typePr, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.typePr) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.disponibiliteAC, 'Disponibilité') }}
+                {{ form_widget(form.disponibiliteAC, {'attr': {'class': 'form-control', 'value': form.disponibiliteAC.vars.value ? form.disponibiliteAC.vars.value|date('Y-m-d\TH:i') : ''}}) }}
+                {{ form_errors(form.disponibiliteAC) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.user, 'Utilisateur') }}
+                {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.user) }}
+            </div>
+
+            <!-- Bouton de création de la préférence -->
+            <button type="submit" class="btn btn-success">Créer</button>
+
+            {{ form_end(form) }}
+        </div>
+
+        <!-- Bouton pour retourner à la liste -->
+        <a href="{{ path('app_preference_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+    </div>
+
+{% endblock %}
+
+</body>
+</html>

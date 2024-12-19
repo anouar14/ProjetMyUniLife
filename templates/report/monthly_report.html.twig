@@ -1,0 +1,142 @@
+{% extends 'Depense.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('app_depense_index') }}" class="orange-button">
+    Retour à la liste des dépenses
+    </a>
+    <h1>Rapport mensuel - {{ month }}/{{ year }}</h1>
+
+    <form method="get" action="{{ path('report_monthly') }}" style="margin-bottom: 20px;">
+        <label for="month">Mois :</label>
+        <select name="month" id="month" style="padding: 5px; border-radius: 5px;">
+            {% set months = [
+                'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+            ] %}
+            {% for i in 1..12 %}
+                <option value="{{ i }}" {% if i == month %}selected{% endif %}>
+                    {{ months[i - 1] }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="year">Année :</label>
+        <select name="year" id="year" style="padding: 5px; border-radius: 5px;">
+            {% for i in (year-5)..(year+5) %}
+                <option value="{{ i }}" {% if i == year %}selected{% endif %}>
+                    {{ i }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Afficher
+        </button>
+    </form>
+
+    <h3>Total Revenu : {{ totalRevenu }}</h3>
+    <h3>Total Dépense : {{ totalDepense }}</h3>
+    <h3>Différence : 
+        <span style="color: {{ difference < 0 ? 'red' : 'green' }}">
+            {{ difference }}
+        </span>
+    </h3>
+    
+    <canvas id="myChart" style="width: 100%; max-width: 600px; margin-top: 30px;"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Revenu', 'Dépense'],
+                datasets: [{
+                    label: 'Montant en €',
+                    data: [{{ totalRevenu }}, {{ totalDepense }}],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Comparaison Revenu / Dépense'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    <div id="chat-container" style="border: 1px solid #ccc; padding: 10px; margin-top: 20px; max-width: 400px;">
+    <h3>Assistant Financier</h3>
+    <div id="chat-messages" style="height: 200px; overflow-y: auto; background-color: #f9f9f9; padding: 10px; margin-bottom: 10px;">
+        <!-- Messages seront ajoutés ici -->
+    </div>
+    <form id="chat-form">
+        <input type="text" id="user-message" placeholder="Posez une question..." style="width: 80%; padding: 5px;">
+        <button type="submit" style="padding: 5px;">Envoyer</button>
+    </form>
+</div>
+<script>
+document.getElementById('chat-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const userMessage = document.getElementById('user-message').value;
+    if (!userMessage) return;
+
+    // Ajouter le message de l'utilisateur dans l'interface
+    const chatMessages = document.getElementById('chat-messages');
+    const userMsgElem = document.createElement('div');
+    userMsgElem.textContent = "Vous : " + userMessage;
+    userMsgElem.style.marginBottom = "10px";
+    chatMessages.appendChild(userMsgElem);
+
+    // Envoyer la requête au serveur
+    try {
+        const response = await fetch('{{ path("report_chat") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur lors de la communication avec le serveur.");
+        }
+
+        const data = await response.json();
+
+        // Afficher la réponse de l'IA
+        const botMsgElem = document.createElement('div');
+        botMsgElem.textContent = "Assistant : " + data.message;
+        botMsgElem.style.marginBottom = "10px";
+        botMsgElem.style.color = "blue";
+        chatMessages.appendChild(botMsgElem);
+    } catch (error) {
+        console.error("Erreur :", error);
+        const errorElem = document.createElement('div');
+        errorElem.textContent = "Assistant : Une erreur est survenue.";
+        errorElem.style.color = "red";
+        chatMessages.appendChild(errorElem);
+    }
+
+    // Vider le champ de saisie
+    document.getElementById('user-message').value = "";
+});
+</script>
+
+
+{% endblock %}

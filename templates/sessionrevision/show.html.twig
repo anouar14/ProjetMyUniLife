@@ -1,0 +1,14 @@
+{% extends 'revisionbase.html.twig' %}
+{% block body %}
+    <h1>Détails de la session de révision</h1>
+
+    <p><strong>Date de début :</strong> {{ sessionrevision.dateDebut|date('Y-m-d H:i') }}</p>
+    <p><strong>Durée allouée :</strong> {{ sessionrevision.dureeAllouee }}</p>
+    <p><strong>Durée réelle :</strong> {{ sessionrevision.dureeReelle }}</p>
+    <p><strong>Objectif atteint :</strong> {{ sessionrevision.objectifAtteint ? 'Oui' : 'Non' }}</p>
+    <p><strong>Utilisateur :</strong> {{ sessionrevision.user.nom }}</p>
+    <p><strong>Matière :</strong> {{ sessionrevision.matiere.nom }}</p>
+
+    <a href="{{ path('app_sessionrevision_edit', {'id': sessionrevision.id}) }}" class="btn btn-primary">Modifier</a>
+    <a href="{{ path('app_sessionrevision_index') }}" class="btn btn-danger">Retour</a>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'revisionbase.html.twig' %}
+{% block body %}
+    <h1>Créer une nouvelle Session de Révision</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.dateDebut) }}
+        {{ form_row(form.dureeAllouee) }}
+        {{ form_row(form.dureeReelle) }}
+        {{ form_row(form.objectifAtteint) }}
+        {{ form_row(form.user) }}
+        {{ form_row(form.matiere) }}
+        <button class="btn btn-success">Créer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_sessionrevision_index') }}" class="btn btn-danger">Retour</a>
+{% endblock %}

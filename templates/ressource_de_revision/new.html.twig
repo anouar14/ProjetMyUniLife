@@ -1,0 +1,14 @@
+{% extends 'revisionbase.html.twig' %}
+
+{% block body %}
+    <h1>Ajouter une Ressource de Révision</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.type) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.matiere) }}
+        <button class="btn btn-success">Ajouter</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_ressource_de_revision_index') }}" class="btn btn-danger">Retour</a>
+{% endblock %}

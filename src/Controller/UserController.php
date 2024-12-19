@@ -37,8 +37,9 @@ final class UserController extends AbstractController
     public function index(UserRepository $userRepository): Response
     {
         // Récupère tous les utilisateurs de la base et les envoie à la vue
+        $users = $userRepository->findAll();
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
         ]);
     }
 
@@ -69,7 +70,7 @@ final class UserController extends AbstractController
 
             // Affiche un message flash pour informer de la réussite
             $this->addFlash('success', 'Utilisateur créé avec succès.');
-            return $this->redirectToRoute('app_log', [], Response::HTTP_SEE_OTHER); // Redirige vers la page de connexion
+            return $this->redirectToRoute('app_join', [], Response::HTTP_SEE_OTHER); // Redirige vers la page de connexion
         }
 
         // Affiche le formulaire de création d'un nouvel utilisateur
@@ -220,7 +221,7 @@ final class UserController extends AbstractController
     public function resetPassword(string $token, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         // Cherche l'utilisateur avec le token de réinitialisation
-        $user = $userRepository->findOneBy(['resetToken' => $token]);
+        $user = $userRepository->findOneBy(['resetToken' => $token]);//Chercher dans la base de données un utilisateur dont le champ resetToken correspond au token passé dans l’URL.
 
         // Si l'utilisateur n'existe pas, affiche un message d'erreur
         if (!$user) {
@@ -232,19 +233,27 @@ final class UserController extends AbstractController
         if ($request->isMethod('POST')) {
             // Récupère le nouveau mot de passe
             $newPassword = $request->request->get('new_password');
+
+    // Vérifie que le mot de passe n'est pas vide
+            if (empty($newPassword)) {
+                $this->addFlash('error', 'Le mot de passe ne peut pas être vide.');
+                return $this->redirectToRoute('app_reset_password', ['token' => $token]);
+            }
             $hashedPassword = $passwordHasher->hashPassword($user, $newPassword); // Hache le mot de passe
 
             // Met à jour le mot de passe de l'utilisateur et supprime le token
-            $user->setPassword($hashedPassword);
-            $user->setResetToken(null);
+            $user->setPassword($hashedPassword);//Remplace l’ancien mot de passe par le nouveau mot de passe haché.
+            $user->setResetToken(null);//Supprime le token de réinitialisation pour éviter qu'il soit réutilisé.
             $entityManager->flush(); // Sauvegarde les modifications en base de données
 
             // Affiche un message de succès et redirige vers la page de connexion
             $this->addFlash('success', 'Password successfully reset.');
-            return $this->redirectToRoute('app_log');
+            return $this->redirectToRoute('app_join');
         }
 
         // Affiche le formulaire de réinitialisation de mot de passe
-        return $this->render('user/reset_password.html.twig');
+        return $this->render('user/reset_password.html.twig', [
+            'token' => $token, // Transmet le token au template
+        ]);
     }
 }

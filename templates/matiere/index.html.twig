@@ -1,0 +1,88 @@
+{% extends 'revisionbase.html.twig' %}
+
+{% block body %}
+    <h1>Liste des Matières</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom de la matière</th>
+                <th>Sessions de révision</th>
+                <th>Ressources</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for matiere in matieres %}
+                <tr>
+                    <td>{{ matiere.nom }}</td>
+                    <td>
+                        {% for session in matiere.sessions %}
+                            {{ session.dateDebut|date('Y-m-d') }},
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for ressource in matiere.ressources %}
+                            {{ ressource.type }},
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_matiere_show', {'id': matiere.id}) }}"class="orange-button-small">Voir</a>
+                        <a href="{{ path('app_matiere_edit', {'id': matiere.id}) }}"class="orange-button-small">Modifier</a>
+                        <form action="{{ path('app_matiere_delete', {'id': matiere.id}) }}" method="POST" style="display:inline;">
+                            <button type="submit"class="orange-button-small">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_matiere_new') }}" class="btn btn-primary">Ajouter une Matière</a>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .orange-button {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .orange-button:hover {
+        background-color: darkorange;
+    }
+
+    .orange-button-small {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 5px 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .orange-button-small:hover {
+        background-color: darkorange;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 20px;
+        text-align: left;
+        color: white;
+        width: 150px;
+    }
+
+    .table thead {
+        background-color: #333;
+        color: white;
+    }
+</style>
+{% endblock %}

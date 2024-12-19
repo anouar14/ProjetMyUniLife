@@ -1,0 +1,12 @@
+{% extends 'depense.html.twig' %}
+
+
+{% block title %}New Depense{% endblock %}
+
+{% block body %}
+    <h1>Create new Depense</h1>
+
+    {{ include('depense/_form.html.twig') }}
+
+    <a href="{{ path('app_depense_index') }}" class="btn hero-btn" data-animation="fadeInLeft" >Back to List</a>
+{% endblock %}

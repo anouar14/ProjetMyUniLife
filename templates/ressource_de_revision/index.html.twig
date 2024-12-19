@@ -1,0 +1,79 @@
+{% extends 'revisionbase.html.twig' %}
+
+{% block body %}
+    <h1>Liste des Ressources de Révision</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Matière</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ressource in ressources %}
+                <tr>
+                    <td>{{ ressource.type }}</td>
+                    <td>{{ ressource.description }}</td>
+                    <td>{{ ressource.matiere.nom }}</td>
+                    <td>
+                        <a href="{{ path('app_ressource_de_revision_show', {'id': ressource.id}) }}"class="orange-button-small">Voir</a>
+                        <a href="{{ path('app_ressource_de_revision_edit', {'id': ressource.id}) }}"class="orange-button-small">Modifier</a>
+                        <form action="{{ path('app_ressource_de_revision_delete', {'id': ressource.id}) }}" method="POST" style="display:inline;">
+                            <button type="submit"class="orange-button-small">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ressource_de_revision_new') }}" class="btn btn-primary">Ajouter une Ressource</a>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .orange-button {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .orange-button:hover {
+        background-color: darkorange;
+    }
+
+    .orange-button-small {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 5px 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .orange-button-small:hover {
+        background-color: darkorange;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        color: white;
+    }
+
+    .table thead {
+        background-color: #333;
+        color: white;
+    }
+</style>
+{% endblock %}

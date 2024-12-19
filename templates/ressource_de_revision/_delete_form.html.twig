@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_ressource_de_revision_delete', {'id': ressource_de_revision.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ressource_de_revision.id) }}">
+    <button class="btn btn-danger" type="submit">Delete</button>
+</form>

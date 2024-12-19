@@ -1,0 +1,10 @@
+<form method="post" action="{{ path('app_preference_delete', {'id': preference.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" class="d-inline">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ preference.id) }}">
+    <button class="btn btn-danger">
+        <i class="fas fa-trash"></i> Delete
+    </button>
+</form>
+
+<a href="{{ path('app_preference_index') }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i> Back to list
+</a>

@@ -1,0 +1,138 @@
+{% extends 'revisionbase.html.twig' %}
+{% block body %}
+    <h1 class="mb-4">Liste des Sessions de Révision</h1>
+
+    <!-- Toggleable filter button -->
+    <button id="toggleFilter" class="orange-button">Filtrer les Sessions</button>
+
+    <!-- Hidden filter form -->
+    <form method="get" action="{{ path('app_sessionrevision_index') }}" class="mb-4" id="filterForm" style="display:none; margin-top: 20px;">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="date_from" class="form-label">Date de début (À partir de)</label>
+                <input type="date" id="date_from" name="date_from" class="form-control" value="{{ app.request.query.get('date_from') }}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="date_to" class="form-label">Date de début (Jusqu'à)</label>
+                <input type="date" id="date_to" name="date_to" class="form-control" value="{{ app.request.query.get('date_to') }}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="min_duration" class="form-label">Durée minimale</label>
+                <input type="number" id="min_duration" name="min_duration" class="form-control" value="{{ app.request.query.get('min_duration') }}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="max_duration" class="form-label">Durée maximale</label>
+                <input type="number" id="max_duration" name="max_duration" class="form-control" value="{{ app.request.query.get('max_duration') }}">
+            </div>
+        </div>
+
+        <button type="submit" class="orange-button mt-3">Appliquer les filtres</button>
+    </form>
+    <!-- JavaScript to toggle the filter form -->
+<script>
+    document.getElementById('toggleFilter').addEventListener('click', function(event) {
+        // Empêche l'action par défaut du bouton
+        event.preventDefault();
+        
+        // Récupère l'élément du formulaire de filtrage
+        const filterForm = document.getElementById('filterForm');
+        
+        // Toggle l'affichage du formulaire de filtre
+        if (filterForm.style.display === "none" || filterForm.style.display === "") {
+            filterForm.style.display = "block";  // Affiche le formulaire
+        } else {
+            filterForm.style.display = "none";  // Cache le formulaire
+        }
+    });
+</script>
+    <!-- Table for displaying sessions -->
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Date de début</th>
+                    <th>Durée allouée</th>
+                    <th>Durée réelle</th>
+                    <th>Objectif atteint</th>
+                    <th>Utilisateur</th>
+                    <th>Matière</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessionrevisions %}
+                    <tr>
+                        <td>{{ session.dateDebut|date('Y-m-d H:i') }}</td>
+                        <td>{{ session.dureeAllouee }}</td>
+                        <td>{{ session.dureeReelle }}</td>
+                        <td>{{ session.objectifAtteint ? 'Oui' : 'Non' }}</td>
+                        <td>{{ session.user ? session.user.nom : 'Utilisateur non assigné' }}</td>
+                        <td>{{ session.matiere ? session.matiere.nom : 'Matière non assignée' }}</td>
+                        <td>
+                            <a href="{{ path('app_sessionrevision_show', {'id': session.id}) }}" class="orange-button-small">Voir</a>
+                            <a href="{{ path('app_sessionrevision_edit', {'id': session.id}) }}" class="orange-button-small">Modifier</a>
+                            <form action="{{ path('app_sessionrevision_delete', {'id': session.id}) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="orange-button-small">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align:center;">Aucune session de révision trouvée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ path('app_sessionrevision_new') }}" class="orange-button mt-3">Ajouter une Session</a>
+
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .orange-button {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .orange-button:hover {
+        background-color: darkorange;
+    }
+
+    .orange-button-small {
+        display: inline-block;
+        background-color: orange;
+        color: white;
+        padding: 5px 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .orange-button-small:hover {
+        background-color: darkorange;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        color: white;
+    }
+
+    .table thead {
+        background-color: #333;
+        color: white;
+    }
+</style>
+{% endblock %}

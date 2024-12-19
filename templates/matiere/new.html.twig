@@ -1,0 +1,12 @@
+{% extends 'revisionbase.html.twig' %}
+
+{% block body %}
+    <h1>Ajouter une Matière</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        <button class="btn btn-success">Ajouter</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_matiere_index') }}" class="btn btn-danger">Retour</a>
+{% endblock %}

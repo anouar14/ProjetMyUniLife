@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
@@ -14,12 +15,21 @@ class Categorie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom de la catégorie est obligatoire.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Le nom de la catégorie ne doit pas dépasser 255 caractères.'
+    )]
     private ?string $nomCat = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le montant maximum est obligatoire.')]
+    #[Assert\Positive(message: 'Le montant maximum doit être un nombre positif.')]
     private ?float $montanMax = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le montant de la catégorie est obligatoire.')]
+    #[Assert\PositiveOrZero(message: 'Le montant de la catégorie ne peut pas être négatif.')]
     private ?float $montantCat = null;
 
     public function getId(): ?int
@@ -61,5 +71,10 @@ class Categorie
         $this->montantCat = $montantCat;
 
         return $this;
+    }
+
+    public function isMontantExceeded(): bool
+    {
+        return $this->montantCat > $this->montanMax;
     }
 }

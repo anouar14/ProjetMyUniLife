@@ -38,7 +38,7 @@ final class TacheController extends AbstractController
      {
          $tache = new Tache(); // Crée une nouvelle instance de l'entité Tache
          $tache->setStatutT(false); // Définit le statut de la tâche à "false" (non terminée)
-         
+        
          // Crée le formulaire à partir de la classe TacheType
          $form = $this->createForm(TacheType::class, $tache);
          $form->handleRequest($request); // Traite la requête pour ce formulaire
@@ -61,9 +61,13 @@ final class TacheController extends AbstractController
              // Récupère l'ID de l'utilisateur pour afficher un message de succès
              $userId = $tache->getUser()->getId();
              $this->addFlash('success', 'Tâche créée avec succès pour l\'utilisateur ID: ' . $userId);
-     
+             // Récupère toutes les tâches
+              $taches = $tacheRepository->findAll();
              // Redirige vers la vue des tâches après la création
-             return $this->render('tache/index.html.twig', []);
+             return $this->render('tache/index.html.twig', [
+                'taches' => $taches,
+        
+             ]);
          }
      
          // Si le formulaire n'est pas soumis ou est invalide, on affiche le formulaire
@@ -118,7 +122,7 @@ public function delete(Request $request, Tache $tache, EntityManagerInterface $e
 }
 
    
-#[Route(name: 'app_tache_index', methods: ['GET', 'POST'])] // Route pour rechercher des tâches
+#[Route('/tache',name: 'app_tache_index', methods: ['GET', 'POST'])] // Route pour rechercher des tâches
 public function rechercheTache(Request $request, TacheRepository $tacheRepository): Response
 {
     $searchTerm = $request->query->get('search', ''); // Récupère le terme de recherche de la requête

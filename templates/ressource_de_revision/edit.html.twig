@@ -1,0 +1,13 @@
+{% extends 'revisionbase.html.twig' %}
+
+{% block title %}Edit RessourceDeRevision{% endblock %}
+
+{% block body %}
+    <h1>Edit RessourceDeRevision</h1>
+
+    {{ include('ressource_de_revision/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_ressource_de_revision_index') }}">back to list</a>
+
+    {{ include('ressource_de_revision/_delete_form.html.twig') }}
+{% endblock %}

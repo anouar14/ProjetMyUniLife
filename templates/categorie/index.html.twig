@@ -1,0 +1,41 @@
+{% extends 'depense.html.twig' %}
+
+{% block title %}Categorie index{% endblock %}
+
+{% block body %}
+    <h1>Liste Categorie </h1>
+    <a href="{{ path('app_depense_index') }}" class="orange-button">
+    Retour à la liste des dépenses
+    </a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomCat</th>
+                <th>MontanMax</th>
+                <th>MontantCat</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie in categories %}
+            <tr>
+                <td>{{ categorie.id }}</td>
+                <td>{{ categorie.nomCat }}</td>
+                <td>{{ categorie.montanMax }}</td>
+                <td>{{ categorie.montantCat }}</td>
+                <td>
+                    <a href="{{ path('app_categorie_show', {'id': categorie.id}) }}">show</a>
+                    <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categorie_new') }}">Create new</a>
+{% endblock %}

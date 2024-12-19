@@ -1,0 +1,95 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}Symfony Maniac</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/slicknav.css')}}">
+    <link rel="stylesheet" href="{{asset('css/flaticon.css')}}">
+    <link rel="stylesheet" href="{{asset('css/progressbar_barfiller.css')}}">
+    <link rel="stylesheet" href="{{asset('css/gijgo.css')}}">
+    <link rel="stylesheet" href="{{asset('css/animate.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/animated-headline.css')}}">
+    <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{asset('css/fontawesome-all.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{asset('css/slick.css')}}">
+    <link rel="stylesheet" href="{{asset('css/nice-select.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    
+        {% block stylesheets %}
+        {% endblock %}
+
+<section class="slider-area ">
+            <div class="slider-active">
+                <!-- Single Slider -->
+                <div class="single-slider slider-height d-flex align-items-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-7 col-md-12">
+                                <div class="hero__caption">
+                                    {% block body%}{% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                </div>
+            </div>
+        </section>
+
+
+
+        <script src="{{asset('js/vendor/modernizr-3.5.0.min.js')}}"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="{{asset('js/vendor/jquery-1.12.4.min.js')}}"></script>
+<script src="{{asset('js/popper.min.js')}}"></script>
+<script src="{{asset('js/bootstrap.min.js')}}"></script>
+<!-- Jquery Mobile Menu -->
+<script src="{{asset('js/jquery.slicknav.min.js')}}"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="{{asset('js/owl.carousel.min.js')}}"></script>
+<script src="{{asset('js/slick.min.js')}}"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="{{asset('js/wow.min.js')}}"></script>
+<script src="{{asset('js/animated.headline.js')}}"></script>
+<script src="{{asset('js/jquery.magnific-popup.js')}}"></script>
+
+<!-- Date Picker -->
+<script src="{{asset('js/gijgo.min.js')}}"></script>
+
+
+<!-- Progress -->
+<script src="{{asset('js/jquery.barfiller.js')}}"></script>
+
+<!-- counter , waypoint,Hover Direction -->
+<script src="{{asset('js/jquery.counterup.min.js')}}"></script>
+<script src="{{asset('js/waypoints.min.js')}}"></script>
+<script src="{{asset('js/jquery.countdown.min.js')}}"></script>
+<script src="{{asset('js/hover-direction-snake.min.js')}}"></script>
+
+<!-- contact js -->
+<script src="{{asset('js/contact.js')}}"></script>
+<script src="{{asset('js/jquery.form.js')}}"></script>
+<script src="{{asset('js/jquery.validate.min.js')}}"></script>
+<script src="{{asset('js/mail-script.js')}}"></script>
+<script src="{{asset('js/jquery.ajaxchimp.min.js')}}"></script>
+
+<!-- Jquery Plugins, main Jquery -->	
+<script src="{{asset('js/plugins.js')}}"></script>
+<script src="{{asset('js/main.js')}}"></script>
+ {% block javascripts %}
+            
+        {% endblock %}
+
+    </body>
+</html>

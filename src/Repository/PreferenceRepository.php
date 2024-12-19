@@ -40,4 +40,11 @@ class PreferenceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findAllOrderedById()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

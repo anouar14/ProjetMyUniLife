@@ -1,0 +1,125 @@
+{% extends 'depense.html.twig' %}
+
+{% block title %}Rapport Mensuel{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-4">Rapport Mensuel</h1>
+
+    <div class="container mt-5">
+        <!-- Tableau récapitulatif -->
+        <h3>Résumé des dépenses et revenus mensuels</h3>
+        <table class="table table-striped table-bordered mt-4">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mois</th>
+                    <th>Revenu (DT)</th>
+                    <th>Dépense (DT)</th>
+                    <th>Solde (DT)</th>
+                    <th>Conseil</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for month, data in monthlyData %}
+                    <tr>
+                        <td>{{ month }}</td>
+                        <td>{{ data.revenu }}</td>
+                        <td>{{ data.depense }}</td>
+                        <td class="{{ (data.revenu - data.depense) < 0 ? 'text-danger' : 'text-success' }}">
+                            {{ data.revenu - data.depense }}
+                        </td>
+                        <td>{{ advices[month] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Section des graphiques -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h4>Graphique des revenus et dépenses</h4>
+                <canvas id="revenueExpenseChart"></canvas>
+            </div>
+            <div class="col-md-6">
+                <h4>Évolution du solde mensuel</h4>
+                <canvas id="balanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclusion de Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Préparation des données pour les graphiques
+        const months = {{ monthlyData|keys|json_encode|raw }};
+        const revenus = {{ monthlyData|map(data => data.revenu)|json_encode|raw }};
+        const depenses = {{ monthlyData|map(data => data.depense)|json_encode|raw }};
+        const balances = revenus.map((revenu, index) => revenu - depenses[index]);
+
+        // Graphique Revenus vs Dépenses
+        const revenueExpenseChart = new Chart(
+            document.getElementById('revenueExpenseChart').getContext('2d'),
+            {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Revenus (DT)',
+                            data: revenus,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                        },
+                        {
+                            label: 'Dépenses (DT)',
+                            data: depenses,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'Revenus vs Dépenses (Mensuel)',
+                        },
+                    },
+                },
+            }
+        );
+
+        // Graphique Solde Mensuel
+        const balanceChart = new Chart(
+            document.getElementById('balanceChart').getContext('2d'),
+            {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Solde (DT)',
+                            data: balances,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            fill: true,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'Évolution du Solde Mensuel',
+                        },
+                    },
+                },
+            }
+        );
+    </script>
+{% endblock %}
